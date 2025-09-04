@@ -14,7 +14,6 @@ This project contains web automation tests using **Groovy + Selenium** and Gradl
 1. Clone the repository
 ```bash
 git clone https://github.com/chamorata/technical-exam.git
-cd <your-repo>
 ```
 2. Use this command for local run
 ```bash 
