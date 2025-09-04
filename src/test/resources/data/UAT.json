@@ -1,0 +1,14 @@
+{
+  "baseUrl": "https://uat.example.com",
+  "selectYourNumber": "pick a new number",
+  "simType": "USIM",
+  "firstName": "Test",
+  "lastName": "Test",
+  "dateOfBirth": "09/01/1994",
+  "password": "Password123!",
+  "address": "Level 6, 17-19 Bridge St, SYDNEY NSW 2000",
+  "paymentMethod": "Card",
+  "ccNumber": "4242 4242 4242 4242",
+  "exp": "01/27",
+  "cvc": "123"
+}
