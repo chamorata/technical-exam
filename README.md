@@ -18,5 +18,5 @@ cd <your-repo>
 ```
 2. Use this command for local run
 ```bash 
-./gradlew test -Denv=<environment>
+./gradlew test -Penv=PROD -Pbrowser=chrome
 ```

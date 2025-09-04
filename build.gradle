@@ -1,5 +1,6 @@
 plugins {
     id 'groovy'
+    id 'java'
 }
 
 repositories {
@@ -12,9 +13,17 @@ dependencies {
     testImplementation "org.spockframework:spock-core:2.3-groovy-3.0"
     testImplementation "org.seleniumhq.selenium:selenium-java:4.20.0"
     testImplementation "org.testng:testng:7.10.2"
+    testImplementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.14.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.14.0'
 }
 
 test {
-    useTestNG()
-    systemProperties System.getProperties()
+    useTestNG() {
+        suites 'src/test/resources/testng.xml'
+    }
+
+    systemProperties = [
+            env    : project.findProperty('env') ?: 'SIT',
+            browser: project.findProperty('browser') ?: 'chrome'
+    ]
 }
