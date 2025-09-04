@@ -3,6 +3,7 @@ name: Groovy Selenium CI/CD
 on:
   push:
     branches: [main]
+  workflow_dispatch:
   pull_request:
     branches: [main]
 
