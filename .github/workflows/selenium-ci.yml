@@ -36,7 +36,7 @@ jobs:
           ./gradlew clean test -Penv=$ENVIRONMENT -Pbrowser=${{ matrix.browser }}
 
       - name: Upload Test Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: selenium-report-${{ matrix.browser }}
           path: build/reports/tests/test/index.html
