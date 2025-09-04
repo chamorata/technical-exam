@@ -1,11 +1,12 @@
 name: Groovy Selenium CI/CD
 
+# Trigger workflow on push, pull request, or manually
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [main, SIT, UAT, PROD]  # adjust to your branches
   pull_request:
     branches: [main]
+  workflow_dispatch:  # allows manual runs from GitHub UI
 
 jobs:
   selenium-tests:
@@ -13,30 +14,50 @@ jobs:
 
     strategy:
       matrix:
-        browser: [chrome, firefox]
+        browser: [chrome, firefox]  # run tests on both browsers
+      fail-fast: false  # continue all matrix jobs even if one fails
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Java
+      # Step 2: Set up Java
+      - name: Set up Java 17
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Gradle
+      # Step 3: Set up Gradle
+      - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
 
+      # Step 4: Install Browsers
+      - name: Install Google Chrome
+        if: matrix.browser == 'chrome'
+        run: |
+          sudo apt update
+          sudo apt install -y google-chrome-stable
+
+      - name: Install Firefox
+        if: matrix.browser == 'firefox'
+        run: |
+          sudo apt update
+          sudo apt install -y firefox
+
+      # Step 5: Run Selenium Tests
       - name: Run Selenium Tests
         env:
-          ENVIRONMENT: ${{ secrets.TEST_ENV }}
+          ENVIRONMENT: ${{ github.event.inputs.env || 'SIT' }}  # default to SIT
         run: |
           echo "Running tests on browser: ${{ matrix.browser }} in environment: $ENVIRONMENT"
           ./gradlew clean test -Penv=$ENVIRONMENT -Pbrowser=${{ matrix.browser }}
 
+      # Step 6: Upload Test Report as Artifact
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
         with:
           name: selenium-report-${{ matrix.browser }}
           path: build/reports/tests/test/index.html
+          retention-days: 30

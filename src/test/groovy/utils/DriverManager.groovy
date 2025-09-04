@@ -12,27 +12,32 @@ class DriverManager {
 
     static synchronized WebDriver getDriver() {
         if (driver == null) {
-            def browser = System.getProperty("browser") ?: "chrome"
-            switch (browser.toLowerCase()) {
-                case "chrome":
+            def browser = System.getProperty('browser') ?: 'chrome'
+            boolean isCI = System.getenv('CI') != null  // GitHub Actions sets CI=true
+
+            switch(browser.toLowerCase()) {
+                case 'chrome':
                     WebDriverManager.chromedriver().setup()
                     ChromeOptions chromeOptions = new ChromeOptions()
-                    // chromeOptions.addArguments("--headless=new") // uncomment if needed
                     chromeOptions.addArguments("--start-maximized")
                     chromeOptions.addArguments("--disable-notifications")
+                    if (isCI) {
+                        chromeOptions.addArguments("--headless=new")
+                        chromeOptions.addArguments("--no-sandbox")
+                        chromeOptions.addArguments("--disable-dev-shm-usage")
+                    }
                     driver = new ChromeDriver(chromeOptions)
                     break
-
-                case "firefox":
+                case 'firefox':
                     WebDriverManager.firefoxdriver().setup()
                     FirefoxOptions firefoxOptions = new FirefoxOptions()
-                    // firefoxOptions.addArguments("-headless") // uncomment if needed
+                    if (isCI) {
+                        firefoxOptions.addArguments("-headless")
+                    }
                     driver = new FirefoxDriver(firefoxOptions)
-                    driver.manage().window().maximize()
                     break
-
                 default:
-                    throw new IllegalArgumentException("Unsupported browser: ${browser}")
+                    throw new IllegalArgumentException("Unsupported browser: $browser")
             }
         }
         return driver
