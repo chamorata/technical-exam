@@ -49,7 +49,7 @@ jobs:
       # Step 5: Run Selenium Tests
       - name: Run Selenium Tests
         env:
-          ENVIRONMENT: ${{ github.event.inputs.env || 'SIT' }}  # default to SIT
+          ENVIRONMENT: ${{ github.event.inputs.env || 'PROD' }}  # default to SIT
         run: |
           echo "Running tests on browser: ${{ matrix.browser }} in environment: $ENVIRONMENT"
           ./gradlew clean test -Penv=$ENVIRONMENT -Pbrowser=${{ matrix.browser }}
