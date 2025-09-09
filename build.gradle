@@ -23,7 +23,7 @@ test {
     }
 
     systemProperties = [
-            env    : project.findProperty('env') ?: 'SIT',
+            env    : project.findProperty('env') ?: 'PROD',
             browser: project.findProperty('browser') ?: 'chrome'
     ]
 }
