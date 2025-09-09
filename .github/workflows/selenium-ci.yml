@@ -36,6 +36,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Grant execute permission for Gradlew
+        run: chmod +x gradlew
+
       - name: Run Selenium tests
         run: ./gradlew clean test -Penvironment=${{ github.event.inputs.environment }} -Pbrowser=${{ github.event.inputs.browser }}
 
