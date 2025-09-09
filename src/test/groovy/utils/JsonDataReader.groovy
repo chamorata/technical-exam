@@ -7,7 +7,7 @@ class JsonDataReader {
 
     JsonDataReader() {
         // GET ENVIRONMENT FROM SYSTEM PROPERTY; DEFAULT TO SIT IF NONE PROVIDED
-        def envProp = (System.getProperty("env") ?: "SIT").toString()
+        def envProp = (System.getProperty("env") ?: "PROD").toString()
         def env = envProp.trim().toUpperCase()
 
         // BUILD RESOURCE PATH BASED ON ENVIRONMENT
