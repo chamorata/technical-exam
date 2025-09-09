@@ -7,7 +7,7 @@ on:
         description: "Browser to run tests on"
         required: true
         default: "chrome"
-      environment:
+      env:
         description: "Environment to run tests (e.g. SIT, UAT, PROD)"
         required: true
         default: "PROD"
@@ -40,7 +40,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Selenium tests
-        run: ./gradlew clean test -Penvironment=${{ github.event.inputs.environment }} -Pbrowser=${{ github.event.inputs.browser }}
+        run: ./gradlew clean test -Penv=${{ github.event.inputs.environment }} -Pbrowser=${{ github.event.inputs.browser }}
 
       - name: Upload Test Report
         if: always()   # Upload report even if tests fail
