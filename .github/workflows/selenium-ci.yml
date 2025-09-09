@@ -40,7 +40,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Selenium tests
-        run: ./gradlew clean test -Penv=${{ github.event.inputs.environment }} -Pbrowser=${{ github.event.inputs.browser }}
+        run: ./gradlew clean test -Penv=${{ github.event.inputs.env }} -Pbrowser=${{ github.event.inputs.browser }}
 
       - name: Upload Test Report
         if: always()   # Upload report even if tests fail
