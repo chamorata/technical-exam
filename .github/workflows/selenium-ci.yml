@@ -1,46 +1,46 @@
 name: Groovy Selenium CI/CD
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch:   # Manual trigger
+    inputs:
+      browser:
+        description: "Browser to run tests on"
+        required: true
+        default: "chrome"
+      environment:
+        description: "Environment to run tests (e.g. SIT, UAT, PROD)"
+        required: true
+        default: "PROD"
 
 jobs:
-  test:
+  selenium-tests:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        browser: [chrome, firefox]
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          distribution: "temurin"
+          java-version: "17"
 
-      - name: Cache Gradle
-        uses: actions/cache@v3
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ matrix.browser }}
-          restore-keys: gradle-${{ runner.os }}-
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-      - name: Grant execute permission for Gradle
-        run: chmod +x gradlew
-
-      - name: Run Selenium tests on ${{ matrix.browser }}
-        run: ./gradlew clean test -Dbrowser=${{ matrix.browser }}
+      - name: Run Selenium tests
+        run: ./gradlew clean test -Dbrowser=${{ github.event.inputs.browser }} -Denvironment=${{ github.event.inputs.environment }}
 
       - name: Upload Test Report
+        if: always()   # Upload report even if tests fail
         uses: actions/upload-artifact@v4
         with:
           name: test-report
