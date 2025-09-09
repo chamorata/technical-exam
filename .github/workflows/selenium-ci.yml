@@ -39,3 +39,9 @@ jobs:
 
       - name: Run Selenium tests on ${{ matrix.browser }}
         run: ./gradlew clean test -Dbrowser=${{ matrix.browser }}
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: build/reports/tests/test
