@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Run Selenium tests
-        run: ./gradlew clean test -Dbrowser=${{ github.event.inputs.browser }} -Denvironment=${{ github.event.inputs.environment }}
+        run: ./gradlew clean test -Penvironment=${{ github.event.inputs.environment }} -Pbrowser=${{ github.event.inputs.browser }}
 
       - name: Upload Test Report
         if: always()   # Upload report even if tests fail
